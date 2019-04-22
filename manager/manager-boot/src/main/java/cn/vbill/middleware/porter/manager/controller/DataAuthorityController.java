@@ -16,12 +16,8 @@
  */
 package cn.vbill.middleware.porter.manager.controller;
 
-import cn.vbill.middleware.porter.manager.core.entity.DataAuthority;
-import cn.vbill.middleware.porter.manager.service.DataAuthorityService;
-import cn.vbill.middleware.porter.manager.web.message.ResponseMessage;
-import cn.vbill.middleware.porter.manager.web.page.Page;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import static cn.vbill.middleware.porter.manager.web.message.ResponseMessage.ok;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -35,7 +31,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import static cn.vbill.middleware.porter.manager.web.message.ResponseMessage.ok;
+import cn.vbill.middleware.porter.manager.core.dto.DataAuthorityVo;
+import cn.vbill.middleware.porter.manager.core.entity.DataAuthority;
+import cn.vbill.middleware.porter.manager.core.enums.DataSignEnum;
+import cn.vbill.middleware.porter.manager.service.DataAuthorityService;
+import cn.vbill.middleware.porter.manager.web.message.ResponseMessage;
+import cn.vbill.middleware.porter.manager.web.page.Page;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 /**
  * 数据权限控制表 controller控制器
@@ -85,9 +88,64 @@ public class DataAuthorityController {
     @GetMapping
     @ApiOperation(value = "查询列表", notes = "查询列表")
     public ResponseMessage list(@RequestParam(value = "pageNum", required = false) Integer pageNum,
-                                @RequestParam(value = "pageSize", required = false) Integer pageSize) {
+            @RequestParam(value = "pageSize", required = false) Integer pageSize) {
         Page<DataAuthority> page = dataAuthorityService.page(new Page<DataAuthority>(pageNum, pageSize));
         return ok(page);
     }
 
+    /**
+     * 权限管理页面
+     * 
+     * @return
+     */
+    @PostMapping("/dataauthorityvo")
+    @ApiOperation(value = "权限页面数据vo", notes = "权限页面数据vo")
+    public ResponseMessage dataAuthorityVo(@RequestParam(value = "dataSignEnum", required = true) DataSignEnum sign,
+            @RequestParam(value = "objectId", required = true) Long objectId) {
+        DataAuthorityVo vo = dataAuthorityService.dataAuthorityVo(sign.getTable(), objectId);
+        return ok(vo);
+    }
+
+    /**
+     * 移交权限
+     * 
+     * @return
+     */
+    @PostMapping("/turnover")
+    @ApiOperation(value = "移交权限", notes = "移交权限")
+    public ResponseMessage turnover(@RequestParam(value = "dataSignEnum", required = true) DataSignEnum sign,
+            @RequestParam(value = "objectId", required = true) Long objectId,
+            @RequestParam(value = "ownerId", required = true) Long ownerId) {
+
+        Boolean key = dataAuthorityService.turnover(sign.getTable(), objectId, ownerId);
+        return key ? ok() : ResponseMessage.error("移交数据权限失败，请联系管理员！");
+    }
+
+    /**
+     * 共享权限
+     * 
+     * @return
+     */
+    @PostMapping("/share")
+    @ApiOperation(value = "共享权限", notes = "共享权限")
+    public ResponseMessage share(@RequestParam(value = "dataSignEnum", required = true) DataSignEnum sign,
+            @RequestParam(value = "objectId", required = true) Long objectId,
+            @RequestParam(value = "ownerIds", required = true) Long[] ownerIds) {
+
+        Boolean key = dataAuthorityService.share(sign.getTable(), objectId, ownerIds);
+        return key ? ok() : ResponseMessage.error("共享数据权限失败，请联系管理员！");
+    }
+
+    /**
+     * 放弃权限
+     * 
+     * @return
+     */
+    @PostMapping("/waive")
+    @ApiOperation(value = "放弃权限", notes = "放弃权限")
+    public ResponseMessage waive(@RequestParam(value = "dataSignEnum", required = true) DataSignEnum sign,
+            @RequestParam(value = "objectId", required = true) Long objectId) {
+        Boolean key = dataAuthorityService.waive(sign.getTable(), objectId);
+        return key ? ok() : ResponseMessage.error("放弃数据权限失败，请联系管理员！");
+    }
 }
