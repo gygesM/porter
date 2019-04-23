@@ -155,6 +155,7 @@
    - 启动manager-boot
 
      ````
+<<<<<<< HEAD
      // linux
      ./app/soft/porter/manager-boot-3.0.2/bin/manager-boot
      // windows
@@ -162,6 +163,11 @@
      ````
 
      现在浏览器输入IP:8081     admin/admin则可登录管理系统
+=======
+     ./app/soft/porter/manager-boot-3.0.2/bin/manager-boot
+     ````
+
+>>>>>>> 585a18e85bb23c61837dbf3fab8f54c76a27733a
 
    - 启动porter-boot
 
@@ -175,9 +181,23 @@
      如果日志显示节点已经被注册则关闭porter-boot执行
 
      ````
+<<<<<<< HEAD
      ./porter-boot-3.0.2/bin/porter-boot --force
      ````
 
+=======
+     ./app/soft/porter/porter-boot.3.0.2/bin/porter-boot
+     ````
+
+     1. 如果出现没有此文件或者目录则跟上述manager-boot解决方案相同
+
+     2. 如果日志显示节点已经被注册则关闭porter-boot执行
+
+        ````
+        ./porter-boot-3.0.2/bin/porter-boot --force
+        ````
+
+>>>>>>> 585a18e85bb23c61837dbf3fab8f54c76a27733a
 7. 恭喜，部署成功
 
 **注意： 项⽬关闭或启动出错时，请登录zkui，清除⼀下suixingpay节点的数据再启动**
