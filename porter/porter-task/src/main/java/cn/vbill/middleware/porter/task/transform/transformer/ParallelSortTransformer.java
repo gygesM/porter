@@ -14,28 +14,29 @@
  * limitations under the License.
  * </p>
  */
-package cn.vbill.middleware.porter.manager.core.mapper;
 
-import cn.vbill.middleware.porter.manager.core.entity.OwnerControl;
-import org.apache.ibatis.annotations.Param;
+package cn.vbill.middleware.porter.task.transform.transformer;
 
-import java.util.List;
+import cn.vbill.middleware.porter.core.task.setl.ETLBucket;
+import cn.vbill.middleware.porter.task.worker.TaskWork;
 
 /**
- * 权限控制操作类型表 Mapper接口
- *
- * @author: FairyHood
- * @date: 2019-04-02 10:58:29
- * @version: V1.0-auto
- * @review: FairyHood/2019-04-02 10:58:29
+ * @author: zhangkewei[zhang_kw@suixingpay.com]
+ * @date: 2017年12月28日 13:38
+ * @version: V1.0
+ * @review: zhangkewei[zhang_kw@suixingpay.com]/2017年12月28日 13:38
  */
-public interface OwnerControlMapper {
+public class ParallelSortTransformer implements Transformer {
 
-    /**
-     * 查询全部对应关系
-     *
-     * @param type
-     * @return
-     */
-    List<Long> findAll(@Param("type") Integer type);
+    @Override
+    public int order() {
+        return 1;
+    }
+
+    @Override
+    public void transform(ETLBucket bucket, TaskWork work) {
+        work.getDataLoader().sort(bucket);
+    }
+
+
 }
