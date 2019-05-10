@@ -2,13 +2,11 @@ group 'cn.vbill.middleware.porter.manager'
 apply plugin: 'application'
 archivesBaseName = 'porter-manager-cluster'
 mainClassName = "cn.vbill.middleware.porter.manager.ManagerClusterApplication"
-
 ext {
     runJars=archivesBaseName + "-" + version + ".jar"
     runJarsPlaceHolder="{{RUN_JAR}}"
     mainClassPlaceHolder="{{MAIN_CLASS}}"
 }
-
 sourceSets {
     main {
     }
